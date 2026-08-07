@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>vidpack — research the niche, package the video</title>
+<meta name="description" content="vidpack ranks the recent top videos in any YouTube niche by engagement, classifies the hooks behind them, weights the keywords that carry them, and packages the findings into titles, a script, tags and thumbnail direction." />
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#0f0f0f" media="(prefers-color-scheme: dark)" />
+<meta property="og:title" content="vidpack — research the niche, package the video" />
+<meta property="og:description" content="Rank a niche by engagement, read the hooks that win, and get an upload-ready package in about a minute." />
+<meta property="og:type" content="website" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23FF0033'/%3E%3Cg transform='translate(4 4) scale(1.333)' fill='%23fff'%3E%3Crect x='3.5' y='4' width='10' height='13' rx='2.6' opacity='0.45'/%3E%3Crect x='7' y='7.5' width='10' height='13' rx='2.6' opacity='0.7'/%3E%3Crect x='10.5' y='11' width='10' height='13' rx='2.6'/%3E%3C/g%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet" /><link rel="stylesheet" href="/static/base.css?v=15" />
+<link rel="stylesheet" href="/static/landing.css?v=16" />
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem("vidpack-theme");
+      document.documentElement.dataset.theme = t === "dark" ? "dark" : "light";
+    } catch (e) {
+      document.documentElement.dataset.theme = "light";
+    }
+    /* gates the scroll-reveal so a no-JS visitor still sees every section */
+    document.documentElement.classList.add("js");
+  })();
+</script>
+</head>
+<body>
+
+<a class="skip-link" href="#how">Skip to content</a>
+
+<svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+  <defs>
+    <symbol id="i-brand" viewBox="0 0 24 24"><rect x="3.5" y="4" width="10" height="13" rx="2.6" opacity="0.45"/><rect x="7" y="7.5" width="10" height="13" rx="2.6" opacity="0.7"/><rect x="10.5" y="11" width="10" height="13" rx="2.6"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></symbol>
+    <symbol id="i-insights" viewBox="0 0 24 24"><path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/></symbol>
+    <symbol id="i-package" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v3.01c0 .72.43 1.34 1 1.69V20c0 1.1 1.1 2 2 2h14c.9 0 2-.9 2-2V8.7c.57-.35 1-.97 1-1.69V4c0-1.1-.9-2-2-2zm-5 12H9v-2h6v2zm5-7H4V4h16v3z"/></symbol>
+    <symbol id="i-library" viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8 12.5v-9l6 4.5-6 4.5z"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 8c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58a.996.996 0 1 0-1.41 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37a.996.996 0 1 0-1.41 1.41l1.06 1.06c.39.39 1.03.39 1.41 0a.996.996 0 0 0 0-1.41l-1.06-1.06zm1.06-10.96a.996.996 0 0 0-1.41-1.41l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36a.996.996 0 0 0-1.41-1.41l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="m12 4-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></symbol>
+    <symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25z"/></symbol>
+    <symbol id="i-trending" viewBox="0 0 24 24"><path d="m16 6 2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6h-6z"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><path d="M11 7h2v2h-2V7zm0 4h2v6h-2v-6zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 1 3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z"/></symbol>
+    <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></symbol>
+    <symbol id="i-tag" viewBox="0 0 24 24"><path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/></symbol>
+    <symbol id="i-script" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></symbol>
+  </defs>
+</svg>
+
+<!-- ── header ───────────────────────────────────────────────────────── -->
+<header class="site-head" id="siteHead">
+  <div class="wrap site-head-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark"><svg class="ic" aria-hidden="true"><use href="#i-brand"/></svg></span>
+      <span class="brand-name">vidpack</span>
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <a href="#how">How it works</a>
+      <a href="#patterns">Patterns</a>
+      <a href="#package">Packages</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="site-head-tail">
+      <button class="btn btn-icon" id="themeBtn" data-tip="Theme" data-tip-end aria-label="Switch theme">
+        <svg class="ic" id="themeIcon" aria-hidden="true"><use href="#i-moon"/></svg>
+      </button>
+      <a class="btn btn-filled" href="/app">Open vidpack</a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ── hero ───────────────────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow"><svg class="ic ic-xs" aria-hidden="true"><use href="#i-shield"/></svg> Official YouTube Data</p>
+        <h1 class="t-display">
+          Research the niche.<br />
+          <span class="lede-2">Package the video.</span>
+        </h1>
+        <p class="hero-sub">
+          vidpack ranks the recent top videos in any niche by engagement, shows you the hook
+          patterns and keywords behind them, and turns that into titles, a script, tags and
+          thumbnail direction you can upload.
+        </p>
+        <div class="hero-cta">
+          <a class="btn btn-filled btn-lg" href="/app">
+            Start researching <svg class="ic ic-trail" aria-hidden="true"><use href="#i-arrow"/></svg>
+          </a>
+          <a class="btn btn-outlined btn-lg" href="#how">See how it works</a>
+        </div>
+        <p class="hero-note">
+          <svg class="ic ic-xs" aria-hidden="true"><use href="#i-check"/></svg>
+          No scraping. No subscription. Nothing to install.
+        </p>
+      </div>
+
+      <div class="frame" data-reveal>
+        <div class="frame-bar">
+          <span class="frame-dots"><i></i><i></i><i></i></span>
+          <span class="frame-title">vidpack — Research</span>
+        </div>
+        <div class="frame-body">
+          <div class="f-search">
+            <svg class="ic ic-sm" aria-hidden="true"><use href="#i-search"/></svg>
+            african tales faceless youtube automation
+          </div>
+
+          <div class="f-stats">
+            <div class="f-stat">
+              <div class="fs-label">VIDEOS</div>
+              <div class="fs-value">30</div>
+            </div>
+            <div class="f-stat">
+              <div class="fs-label">MEDIAN VIEWS</div>
+              <div class="fs-value">412K</div>
+            </div>
+            <div class="f-stat">
+              <div class="fs-label">AVG ENGAGEMENT</div>
+              <div class="fs-value">4.12</div>
+            </div>
+          </div>
+
+          <div class="f-list">
+            <div class="f-row">
+              <span class="f-thumb">
+                <img src="https://picsum.photos/seed/baobab/320/180" alt="" loading="lazy" decoding="async" />
+                <span class="f-dur">10:24</span>
+              </span>
+              <span class="f-body">
+                <span class="f-title">Anansi the Spider and the Magic Drum — African Folk Tale</span>
+                <span class="f-meta-line">
+                  <span class="f-channel">Tales by the Baobab</span>
+                  <span class="f-sep">·</span>
+                  <span class="f-meta">1.2M views · 2 months ago</span>
+                  <span class="f-hook">number-led</span>
+                </span>
+              </span>
+              <span class="f-score">8.91
+                <span class="meter meter-lead"><i style="width:100%"></i></span>
+              </span>
+            </div>
+            <div class="f-row">
+              <span class="f-thumb">
+                <img src="https://picsum.photos/seed/greedy/320/180" alt="" loading="lazy" decoding="async" />
+                <span class="f-dur">8:47</span>
+              </span>
+              <span class="f-body">
+                <span class="f-title">Why the Tortoise Has a Cracked Shell | African Folktale</span>
+                <span class="f-meta-line">
+                  <span class="f-channel">African Storytime</span>
+                  <span class="f-sep">·</span>
+                  <span class="f-meta">890K views · 3 months ago</span>
+                  <span class="f-hook">curiosity</span>
+                </span>
+              </span>
+              <span class="f-score">7.40
+                <span class="meter"><i style="width:83%"></i></span>
+              </span>
+            </div>
+            <div class="f-row">
+              <span class="f-thumb">
+                <img src="https://picsum.photos/seed/village/320/180" alt="" loading="lazy" decoding="async" />
+                <span class="f-dur">12:05</span>
+              </span>
+              <span class="f-body">
+                <span class="f-title">The Greedy King's Last Feast — African Moral Story</span>
+                <span class="f-meta-line">
+                  <span class="f-channel">Oduduwa Tales</span>
+                  <span class="f-sep">·</span>
+                  <span class="f-meta">640K views · 1 month ago</span>
+                  <span class="f-hook">how-to</span>
+                </span>
+              </span>
+              <span class="f-score">6.15
+                <span class="meter"><i style="width:69%"></i></span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── how it works ───────────────────────────────────────────────── -->
+  <section class="section" id="how">
+    <div class="wrap">
+      <div class="sec-head" data-reveal>
+        <p class="eyebrow"><svg class="ic ic-xs" aria-hidden="true"><use href="#i-insights"/></svg> How it works</p>
+        <h2 class="t-headline">Three steps, about a minute.</h2>
+        <p>Each step writes to a local database, so the second run on a niche costs nothing and the
+           library keeps growing.</p>
+      </div>
+
+      <div class="steps">
+        <div class="step" data-reveal>
+          <span class="step-ic"><svg class="ic" aria-hidden="true"><use href="#i-search"/></svg></span>
+          <h3>Research</h3>
+          <p>Name a niche and a window. vidpack pulls up to 30 recent videos through the official
+             YouTube API, then scores each one on likes and comments per view, weighted for recency.</p>
+        </div>
+        <div class="step" data-reveal>
+          <span class="step-ic"><svg class="ic" aria-hidden="true"><use href="#i-bulb"/></svg></span>
+          <h3>Understand</h3>
+          <p>Every title is classified into hook patterns — listicle, how-to, question, comparison,
+             curiosity. Keywords are weighted by the engagement of the videos that use them.</p>
+        </div>
+        <div class="step" data-reveal>
+          <span class="step-ic"><svg class="ic" aria-hidden="true"><use href="#i-package"/></svg></span>
+          <h3>Package</h3>
+          <p>Get five title variants with a CTR estimate, a timestamped script, a description,
+             twelve tags and three thumbnail concepts. Copy any part, or export the JSON.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── patterns ───────────────────────────────────────────────────── -->
+  <section class="section section-alt" id="patterns">
+    <div class="wrap split">
+      <div class="split-copy" data-reveal>
+        <p class="eyebrow"><svg class="ic ic-xs" aria-hidden="true"><use href="#i-trending"/></svg> Patterns</p>
+        <h2 class="t-headline">See the pattern, not the vibe.</h2>
+        <p>A niche is not a mystery. The same handful of hook shapes carry most of the top videos,
+           and you can read the split before you write a word.</p>
+        <ul class="checks">
+          <li>
+            <svg class="ic ic-sm" aria-hidden="true"><use href="#i-check"/></svg>
+            <span><b>Hook mix</b> — what share of the cohort uses each pattern.</span>
+          </li>
+          <li>
+            <svg class="ic ic-sm" aria-hidden="true"><use href="#i-check"/></svg>
+            <span><b>Weighted keywords</b> — terms ranked by the performance of the videos using them, not raw frequency.</span>
+          </li>
+          <li>
+            <svg class="ic ic-sm" aria-hidden="true"><use href="#i-check"/></svg>
+            <span><b>Cohort profile</b> — the duration band most of the winners sit in, and the posting day with the best average engagement.</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="split-visual" data-reveal>
+        <div class="viz-card">
+          <div class="viz-head">
+            <h4>Hook mix</h4>
+            <span class="viz-sub" style="margin:0">30 videos · 90-day window</span>
+          </div>
+          <div class="viz-rows">
+            <div class="viz-row">
+              <span class="vr-name">number-led</span>
+              <span class="vr-num">42%</span>
+              <span class="meter"><i style="width:42%"></i></span>
+            </div>
+            <div class="viz-row">
+              <span class="vr-name">curiosity</span>
+              <span class="vr-num">31%</span>
+              <span class="meter"><i style="width:31%"></i></span>
+            </div>
+            <div class="viz-row">
+              <span class="vr-name">how-to</span>
+              <span class="vr-num">18%</span>
+              <span class="meter"><i style="width:18%"></i></span>
+            </div>
+            <div class="viz-row">
+              <span class="vr-name">comparison</span>
+              <span class="vr-num">6%</span>
+              <span class="meter"><i style="width:6%"></i></span>
+            </div>
+            <div class="viz-row">
+              <span class="vr-name">plain</span>
+              <span class="vr-num">3%</span>
+              <span class="meter"><i style="width:3%"></i></span>
+            </div>
+          </div>
+          <p class="viz-foot">
+            <svg class="ic ic-xs" aria-hidden="true"><use href="#i-info"/></svg>
+            Share of the analysed cohort. A title can match more than one pattern.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── package ────────────────────────────────────────────────────── -->
+  <section class="section" id="package">
+    <div class="wrap split flip">
+      <div class="split-copy" data-reveal>
+        <p class="eyebrow"><svg class="ic ic-xs" aria-hidden="true"><use href="#i-package"/></svg> Packages</p>
+        <h2 class="t-headline">From findings to upload form.</h2>
+        <p>The package is built from your research, not from a generic prompt. Titles follow the hook
+           patterns that actually lead in your niche, and the tags come from the terms that carry the
+           winners.</p>
+        <ul class="checks">
+          <li><svg class="ic ic-sm" aria-hidden="true"><use href="#i-script"/></svg><span><b>Script</b> with timestamped beats you can read straight to camera.</span></li>
+          <li><svg class="ic ic-sm" aria-hidden="true"><use href="#i-tag"/></svg><span><b>Twelve tags</b> plus a keyword-carrying description.</span></li>
+          <li><svg class="ic ic-sm" aria-hidden="true"><use href="#i-sparkle"/></svg><span><b>Three thumbnail concepts</b> with headline, palette and layout.</span></li>
+        </ul>
+      </div>
+
+      <div class="split-visual" data-reveal>
+        <div class="viz-card">
+          <div class="pkg-preview">
+            <div class="pp-tabs">
+              <span class="on">Titles</span><span>Script</span><span>Description</span><span>Thumbnails</span><span>Tags</span>
+            </div>
+            <div>
+              <div class="pp-title">
+                <span class="pt-rank">1</span>
+                <span class="pt-text">7 Faceless YouTube Automation Setups That Actually Work</span>
+                <span class="pt-meta">
+                  <span class="pt-ctr">
+                    <svg class="ic ic-xs" aria-hidden="true"><use href="#i-trending"/></svg> 6.5% est. CTR
+                    <span class="meter meter-lead"><i style="width:100%"></i></span>
+                  </span>
+                  <span class="tag tag-primary">number-led</span>
+                </span>
+              </div>
+              <div class="pp-title">
+                <span class="pt-rank">2</span>
+                <span class="pt-text">What Nobody Tells You About Faceless YouTube Automation</span>
+                <span class="pt-meta">
+                  <span class="pt-ctr">
+                    <svg class="ic ic-xs" aria-hidden="true"><use href="#i-trending"/></svg> 6.5% est. CTR
+                    <span class="meter"><i style="width:99%"></i></span>
+                  </span>
+                  <span class="tag tag-primary">curiosity</span>
+                </span>
+              </div>
+              <div class="pp-title">
+                <span class="pt-rank">3</span>
+                <span class="pt-text">How to Run Faceless YouTube Automation (Step-by-Step)</span>
+                <span class="pt-meta">
+                  <span class="pt-ctr">
+                    <svg class="ic ic-xs" aria-hidden="true"><use href="#i-trending"/></svg> 4.1% est. CTR
+                    <span class="meter"><i style="width:63%"></i></span>
+                  </span>
+                  <span class="tag tag-primary">how-to</span>
+                </span>
+              </div>
+            </div>
+          </div>
+          <p class="viz-foot">
+            <svg class="ic ic-xs" aria-hidden="true"><use href="#i-info"/></svg>
+            CTR is estimated from the hook pattern and the cohort. It is a ranking aid, not a forecast for your channel.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── proof ──────────────────────────────────────────────────────── -->
+  <section class="section">
+    <div class="wrap">
+      <div class="proof">
+        <div class="proof-item" data-reveal>
+          <p class="p-num">30</p>
+          <p class="p-label">videos per run</p>
+        </div>
+        <div class="proof-item" data-reveal>
+          <p class="p-num">101</p>
+          <p class="p-label">quota-light per run</p>
+        </div>
+        <div class="proof-item" data-reveal>
+          <p class="p-num">5</p>
+          <p class="p-label">title variants per package</p>
+        </div>
+        <div class="proof-item" data-reveal>
+          <p class="p-num">~60s</p>
+          <p class="p-label">niche to package</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── faq ────────────────────────────────────────────────────────── -->
+  <section class="section section-alt" id="faq">
+    <div class="wrap">
+      <div class="sec-head center" data-reveal>
+        <p class="eyebrow"><svg class="ic ic-xs" aria-hidden="true"><use href="#i-info"/></svg> Questions</p>
+        <h2 class="t-headline">The honest answers.</h2>
+      </div>
+
+      <div class="faq">
+        <details>
+          <summary>Does this scrape YouTube?
+            <svg class="ic ic-sm" aria-hidden="true"><use href="#i-chevron"/></svg>
+          </summary>
+          <p class="faq-body">No. Every request goes through the official YouTube Data API v3 —
+             more reliable and less intrusive than scraping.</p>
+        </details>
+        <details>
+          <summary>Is the CTR estimate real?
+            <svg class="ic ic-sm" aria-hidden="true"><use href="#i-chevron"/></svg>
+          </summary>
+          <p class="faq-body">It is an estimate, and we label it as one. It comes from the hook
+             pattern and the cohort, not from your channel's history. Treat it as a way to rank the
+             variants against each other, not as a forecast.</p>
+        </details>
+        <details>
+          <summary>What do I need to run it?
+            <svg class="ic ic-sm" aria-hidden="true"><use href="#i-chevron"/></svg>
+          </summary>
+          <p class="faq-body">Point it at a niche, it does the rest. Data is pulled through the official
+             YouTube API and stored in a local SQLite file — everything lives on your machine.</p>
+        </details>
+        <details>
+          <summary>What does "the library compounds" mean?
+            <svg class="ic ic-sm" aria-hidden="true"><use href="#i-chevron"/></svg>
+          </summary>
+          <p class="faq-body">Every run stores its videos, hooks and packages. Re-pull the stats later
+             and the hooks re-rank against the new numbers, so a hook that keeps performing rises on
+             its own and one that faded drops.</p>
+        </details>
+        <details>
+          <summary>Will this write the video for me?
+            <svg class="ic ic-sm" aria-hidden="true"><use href="#i-chevron"/></svg>
+          </summary>
+          <p class="faq-body">It writes a first draft with the right structure and the right hook.
+             The judgement, the delivery and the actual expertise are still yours — a script that
+             follows the cohort will not save a video that has nothing to say.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── cta ────────────────────────────────────────────────────────── -->
+  <section class="cta">
+    <div class="wrap">
+      <h2 class="t-headline" data-reveal>Your next video is already being watched.</h2>
+      <p data-reveal>Find out which parts of it are working, then build yours from that.</p>
+      <a class="btn btn-filled btn-lg" href="/app" data-reveal>
+        Open vidpack <svg class="ic ic-trail" aria-hidden="true"><use href="#i-arrow"/></svg>
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap foot-inner">
+    <span>vidpack — research, understand, package, publish</span>
+    <span>
+      Uses the official YouTube Data API. No scraping, no screenshots, no ToS games.
+    </span>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    /* theme toggle */
+    var root = document.documentElement;
+    var iconUse = document.querySelector("#themeIcon use");
+
+    function resolved() {
+      var stamped = root.dataset.theme;
+      if (stamped === "light" || stamped === "dark") return stamped;
+      return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    function paint() {
+      iconUse.setAttribute("href", resolved() === "dark" ? "#i-sun" : "#i-moon");
+    }
+    document.getElementById("themeBtn").addEventListener("click", function () {
+      var next = resolved() === "dark" ? "light" : "dark";
+      root.dataset.theme = next;
+      try { localStorage.setItem("vidpack-theme", next); } catch (e) {}
+      paint();
+    });
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () {
+      if (!root.dataset.theme) paint();
+    });
+    paint();
+
+    /* header elevation */
+    var head = document.getElementById("siteHead");
+    function onScroll() {
+      head.dataset.scrolled = window.scrollY > 4 ? "true" : "false";
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+
+    /* reveal on scroll */
+    var targets = document.querySelectorAll("[data-reveal]");
+    if (!("IntersectionObserver" in window)) {
+      targets.forEach(function (t) { t.classList.add("is-in"); });
+      return;
+    }
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry, index) {
+        if (!entry.isIntersecting) return;
+        entry.target.style.transitionDelay = Math.min(index * 60, 240) + "ms";
+        entry.target.classList.add("is-in");
+        observer.unobserve(entry.target);
+      });
+    }, { rootMargin: "0px 0px -12% 0px", threshold: 0.08 });
+    targets.forEach(function (t) { observer.observe(t); });
+  })();
+</script>
+</body>
+</html>
