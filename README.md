@@ -35,12 +35,10 @@ open http://127.0.0.1:8000
 4. **Library** — proven hooks and saved kits per niche. `refresh` re-polls stats and
    re-ranks "proven hooks" — the compounding story.
 
-**Three engines, one tool**
+**Two engines, one tool**
 - `groq` — **Llama-3.3-70B** on Groq's free tier generates context-aware packages and
   stories. Configures up to **3 keys that rotate automatically** when one is
   rate-limited or hits its daily quota — the demo never breaks mid-sweat.
-- `gemini` — free-tier Google Gemini, used automatically if `GEMINI_API_KEY` is set
-  (takes priority over Groq).
 - `rules` — deterministic generator that always works, no keys, and kicks in the
   moment every AI engine is missing, rate-limited, or offline.
 
@@ -52,7 +50,7 @@ py -3.12 -m venv .venv
 .venv\Scripts\pip install -r requirements.txt
 
 # 2. configure keys (optional for rules mode)
-copy .env.example .env   # add YOUTUBE_API_KEY and optionally GEMINI_API_KEY / GROQ_API_KEY
+copy .env.example .env   # add YOUTUBE_API_KEY and optionally GROQ_API_KEY
 
 # 3. run
 py .venv\Scripts\uvicorn app.main:app   # or you can run `python app\main.py`
@@ -67,10 +65,8 @@ Open http://127.0.0.1:8000 — the landing page. The app lives at `/app`.
   quota budget, and batch fetches (search=100 units; a videos stats batch=1 unit).
 - **Groq** (free tier, OpenAI-compatible): console.groq.com/keys → create an API key →
   `GROQ_API_KEY=`. Optional extras `GROQ_API_KEY_2=` / `GROQ_API_KEY_3=` enable
-  automatic key rotation. Used when `GEMINI_API_KEY` is empty.
-- **Gemini** (free tier): aistudio.google.com → create an API key → `GEMINI_API_KEY=`.
-  If set, it takes priority over Groq. If no AI key is set at all, vidpack runs in
-  `rules` mode at full functionality — deterministic packages, no AI.
+  automatic key rotation. If no Groq key is set at all, vidpack runs in `rules` mode
+  at full functionality — deterministic packages, no AI.
 
 ## Architecture
 
@@ -85,7 +81,7 @@ Open http://127.0.0.1:8000 — the landing page. The app lives at `/app`.
         │                     │
  📦 SQLite (app/repositories.py)   🔌 adapters/
    niches · videos · patterns  │  youtube.py — Data API client, quota/retries
-   packages · hooks            │  ai.py      — Groq (rotating keys) + Gemini, strict-JSON
+   packages · hooks            │  ai.py      — Groq (rotating keys), strict-JSON
                                │  rules.py   — deterministic fallback
 ```
 

@@ -14,7 +14,7 @@ Enter a niche → the tool analyzes the top videos in that niche via the **offic
 
 - **Compounding data, not a one-shot generator.** Every research run stores titles, hooks, engagement metrics. A `refresh` job re-polls stats later and re-ranks "proven hooks." Month 3 = 150+ proven hooks and 100+ idea prompts, each with a track record. This is a real differentiator and architected from day one.
 - **Respects platform rules**: official Data API only. Spreads quota usage (search costs 100 units, per-video stats = 1 unit; we use a quota budget + cache).
-- **Graceful degradation**: if AI is unavailable (no Gemini key yet, rate-limited), a rule-based engine still generates a valid package. The demo never breaks.
+- **Graceful degradation**: if AI is unavailable (no Groq key yet, rate-limited), a rule-based engine still generates a valid package. The demo never breaks.
 
 ## 3. Team & stack
 
@@ -23,7 +23,7 @@ Enter a niche → the tool analyzes the top videos in that niche via the **offic
 | Backend | **Python 3.11 + FastAPI** | Fast to build, great data/AI ecosystem, async-native |
 | Storage | **SQLite (WAL mode)** | the compounding DB, zero setup, ships with the tool |
 | Rules-legal data | **YouTube Data API v3** (`search.list`, `videos.list`) | official, quota-aware |
-| AI generation | **Google Gemini free tier** (`gemini-2.5-flash`) | free, no subscription, any niche; rule-based fallback otherwise |
+| AI generation | **Groq free tier** (Llama-3.3-70B, up to 3 rotating keys) | free, no subscription, any niche; rule-based fallback otherwise |
 | Frontend | **Single-page site, vanilla JS + hand-rolled CSS** (no build step) | ships fast, exact design control |
 | UI language | **Syne** (display) + **Space Grotesk** (body), light-first minimal with an optional dark theme, single red accent | design system |
 | Repo | Git (GitHub) | submission requires a repo + README |
@@ -50,7 +50,7 @@ Enter a niche → the tool analyzes the top videos in that niche via the **offic
               └──────┬─────────┘      │      │       │
                      │                │      │       │
         ┌────────────▼────┬───────────▼──┬───▼───────▼─────────┐
-        │ Repository/DB  │ YouTubeAdapter│ GeminiAdapter      │
+        │ Repository/DB  │ YouTubeAdapter│ GroqAdapter        │
         │ (SQLite WAL)  │ (API client) │ (no key → rule      │
         │                │              │  fallback)          │
         └────────────────┴──────────────┴─────────────────────┘
@@ -78,7 +78,7 @@ vidgrid/
 │   │   └── kit.py             # upload-ready kit from a finished script
 │   ├── adapters/
 │   │   ├── youtube.py         # Data API client + quota budget
-│   │   ├── ai.py              # Gemini client + strict-JSON parsing
+│   │   ├── ai.py              # Groq client + strict-JSON parsing
 │   │   └── rules.py           # deterministic template engine (fallback)
 │   ├── patterns.py            # hook/keyword/format extractor (pure)
 │   └── scoring.py             # engagement-score math (pure, unit-testable)
@@ -132,7 +132,7 @@ patterns
 packages
   id INTEGER PK
   niche_id, created_at
-  ai_source TEXT     -- 'gemini' | 'rules'
+  ai_source TEXT     -- 'groq' | 'rules'
   titles_json TEXT   -- [{title, ctr_estimate, rationale}]
   summary TEXT       -- description + SEO
   tags_json TEXT     -- [..]
@@ -205,11 +205,11 @@ All JSON, errors: `{ "error": { "code", "message" } }`.
 
 ---
 
-## 8. AI adapter (Gemini free tier + strict fallback)
+## 8. AI adapter (Groq free tier + strict fallback)
 
 1. Service builds a compact `research_summary` + niche context.
 2. Prompt asks for **strict JSON** (schema shown explicitly).
-3. Gemini `generation_config.responseMimeType=application/json`, temperature ~1.0; safe gemini free quota.
+3. Groq returns OpenAI-compatible JSON (`response_format`), temperature ~1.0; free tier with up to 3 rotating keys.
 4. Response validated against schema; if malformed/missing/rate-limited → **rule engine fallback** produces a valid package (titles from proven hook templates + keywords, script outline built from a proven structure, thumbnail concept from top hook + palette).
 5. `packages.ai` records which engine made it — transparent.
 
@@ -276,7 +276,7 @@ Buffer ≈ 4h = 0. **Gate**: if anything slips, cut scope *from the dashboard*, 
 
 | Risk | Mitigation |
 |---|---|
-| No Gemini key / rate limit | rule engine always works; code path demoed |
+| No Groq key / rate limit | rule engine always works; code path demoed |
 | YouTube quota exhausted live | cache + daily budget warning; demo on seeded DB |
 | Rare niche → zero results | friendly empty states + broaden suggestion |
 | Time overrun | dashboard is the only sacrifceable |
