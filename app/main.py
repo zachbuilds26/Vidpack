@@ -55,7 +55,7 @@ class KitIn(BaseModel):
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     db.init_schema()
-    logger.info("vidpack ready. AI engine: %s", "gemini" if settings.has_gemini_key else "rules")
+    logger.info("vidpack ready. AI engine: %s", "groq" if settings.has_groq_key else "rules")
     if not settings.has_youtube_key:
         logger.warning("YOUTUBE_API_KEY missing — research will fail until it is set.")
     yield
@@ -98,17 +98,12 @@ def index():
 
 @app.get("/api/health")
 def health():
-    if settings.has_gemini_key:
-        ai = "gemini"
-    elif settings.has_groq_key:
-        ai = "groq"
-    else:
-        ai = "rules"
+    ai = "groq" if settings.has_groq_key else "rules"
     return {
         "ok": True,
         "youtube_key": settings.has_youtube_key,
         "ai": ai,
-        "ai_model": getattr(settings, "gemini_model" if ai == "gemini" else "groq_model", ""),
+        "ai_model": settings.groq_model if ai == "groq" else "",
         "db": settings.db_path,
     }
 

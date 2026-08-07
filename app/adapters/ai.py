@@ -1,4 +1,4 @@
-"""Gemini adapter (free tier) that returns strictly-validated JSON packages.
+"""Groq adapter (free tier) that returns strictly-validated JSON packages.
 
 If no key is configured, calls fail fast with AINotConfigured so the service
 layer can transparently fall back to the rule engine.
@@ -168,176 +168,8 @@ No markdown, no commentary.
 """
 
 
-class GeminiClient:
-    def __init__(self, api_key: str | None = None, timeout: float | None = None) -> None:
-        settings = get_settings()
-        self.api_key = api_key or settings.gemini_api_key
-        self.model = settings.gemini_model
-        self.timeout = timeout or settings.gemini_timeout_seconds
-
-    def chat(self, messages: list[dict]) -> str:
-        """Plain-text conversational reply (story scripts etc.). No schema.
-
-        System messages become the API's systemInstruction; user/assistant
-        turns alternate in `contents` (Gemini rejects consecutive same-role
-        entries, and roles must be user/model)."""
-        if not self.api_key:
-            raise AINotConfigured("GEMINI_API_KEY not set.")
-        url = (
-            f"https://generativelanguage.googleapis.com/v1beta/models/"
-            f"{self.model}:generateContent?key={self.api_key}"
-        )
-        system_texts = [
-            str(m.get("content", ""))
-            for m in messages
-            if str(m.get("role")) == "system"
-        ]
-        contents: list[dict] = []
-        for m in messages:
-            if str(m.get("role")) == "system":
-                continue
-            role = "model" if str(m.get("role")) in ("ai", "assistant") else "user"
-            text = str(m.get("content", ""))
-            if contents and contents[-1]["role"] == role:
-                contents[-1]["parts"][0]["text"] += "\n\n" + text
-            else:
-                contents.append({"role": role, "parts": [{"text": text}]})
-        if not contents:
-            contents.append({"role": "user", "parts": [{"text": ""}]})
-        payload = {
-            "contents": contents,
-            "generationConfig": {
-                "temperature": 1.0,
-                "maxOutputTokens": 4096,
-            },
-        }
-        if system_texts:
-            payload["systemInstruction"] = {
-                "role": "user",
-                "parts": [{"text": "\n".join(system_texts)}],
-            }
-        try:
-            resp = httpx.post(
-                url, json=payload, timeout=self.timeout,
-                headers={"Content-Type": "application/json"},
-            )
-        except httpx.HTTPError as exc:
-            raise AIError(f"Gemini request failed: {exc}") from exc
-
-        if resp.status_code == 429:
-            raise AIRateLimited("Gemini free-tier quota exhausted for the moment.")
-        if resp.status_code != 200:
-            raise AIError(f"Gemini API error {resp.status_code}: {resp.text[:300]}")
-
-        data = resp.json()
-        try:
-            return data["candidates"][0]["content"]["parts"][0]["text"]
-        except (KeyError, IndexError, TypeError) as exc:
-            raise AIError("Unexpected Gemini response shape.") from exc
-
-    def generate_package(self, niche: str, summary: dict) -> dict:
-        if not self.api_key:
-            raise AINotConfigured("GEMINI_API_KEY not set.")
-        prompt = _build_prompt(niche, summary)
-        url = (
-            f"https://generativelanguage.googleapis.com/v1beta/models/"
-            f"{self.model}:generateContent?key={self.api_key}"
-        )
-        payload = {
-            "contents": [{"role": "user", "parts": [{"text": prompt}]}],
-            "generationConfig": {
-                "temperature": 1.0,
-                "maxOutputTokens": 4096,
-                "responseMimeType": "application/json",
-            },
-        }
-        try:
-            resp = httpx.post(
-                url, json=payload, timeout=self.timeout,
-                headers={"Content-Type": "application/json"},
-            )
-        except httpx.HTTPError as exc:
-            raise AIError(f"Gemini request failed: {exc}") from exc
-
-        if resp.status_code == 429:
-            raise AIRateLimited("Gemini free-tier quota exhausted for the moment.")
-        if resp.status_code != 200:
-            raise AIError(f"Gemini API error {resp.status_code}: {resp.text[:300]}")
-
-        data = resp.json()
-        try:
-            text = data["candidates"][0]["content"]["parts"][0]["text"]
-        except (KeyError, IndexError, TypeError) as exc:
-            raise AIError("Unexpected Gemini response shape.") from exc
-
-        text = text.strip()
-        block = JSON_BLOCK.search(text)
-        if block:
-            text = block.group(1)
-
-        try:
-            parsed = json.loads(text)
-        except json.JSONDecodeError as exc:
-            raise AIError("Gemini returned non-JSON; falling back.") from exc
-
-        validated = _validate_package(parsed)
-        if validated is None:
-            raise AIError("Gemini JSON failed schema validation.")
-        return validated
-
-    def generate_kit(self, script: str, niche: str) -> dict:
-        """Upload-ready kit (titles/tags/description) from a finished script."""
-        if not self.api_key:
-            raise AINotConfigured("GEMINI_API_KEY not set.")
-        prompt = _build_kit_prompt(script, niche)
-        url = (
-            f"https://generativelanguage.googleapis.com/v1beta/models/"
-            f"{self.model}:generateContent?key={self.api_key}"
-        )
-        payload = {
-            "contents": [{"role": "user", "parts": [{"text": prompt}]}],
-            "generationConfig": {
-                "temperature": 1.0,
-                "maxOutputTokens": 4096,
-                "responseMimeType": "application/json",
-            },
-        }
-        try:
-            resp = httpx.post(
-                url, json=payload, timeout=self.timeout,
-                headers={"Content-Type": "application/json"},
-            )
-        except httpx.HTTPError as exc:
-            raise AIError(f"Gemini request failed: {exc}") from exc
-
-        if resp.status_code == 429:
-            raise AIRateLimited("Gemini free-tier quota exhausted for the moment.")
-        if resp.status_code != 200:
-            raise AIError(f"Gemini API error {resp.status_code}: {resp.text[:300]}")
-
-        data = resp.json()
-        try:
-            text = data["candidates"][0]["content"]["parts"][0]["text"]
-        except (KeyError, IndexError, TypeError) as exc:
-            raise AIError("Unexpected Gemini response shape.") from exc
-
-        text = text.strip()
-        block = JSON_BLOCK.search(text)
-        if block:
-            text = block.group(1)
-        try:
-            parsed = json.loads(text)
-        except json.JSONDecodeError as exc:
-            raise AIError("Gemini returned non-JSON; falling back.") from exc
-
-        validated = _validate_kit(parsed)
-        if validated is None:
-            raise AIError("Gemini JSON failed schema validation.")
-        return validated
-
-
 class GroqClient:
-    """OpenAI-compatible chat endpoint (api.groq.com). Same schema + validator as Gemini.
+    """OpenAI-compatible chat endpoint (api.groq.com). Strict-JSON validation.
     Rotates through GROQ_API_KEY / _2 / _3: daily-quota hits and bad credentials
     roll to the next key; per-minute 429s and provider errors retry in place."""
 
@@ -559,11 +391,6 @@ def _validate_package(data: dict) -> dict | None:
 
 
 def get_ai():
-    """Return the configured AI client: Gemini if set, else Groq, else a stub that
-    raises AINotConfigured so the service layer can fall back to rules."""
-    settings = get_settings()
-    if settings.has_gemini_key:
-        return GeminiClient()
-    if settings.has_groq_key:
-        return GroqClient()
-    return GeminiClient()
+    """Return a Groq client. With no keys configured it raises AINotConfigured
+    on first use, so the service layer falls back to the rule engine."""
+    return GroqClient()

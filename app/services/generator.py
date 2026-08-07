@@ -9,7 +9,7 @@ from ..repositories import Repositories
 
 logger = logging.getLogger("vidpack.generator")
 
-_ENGINE_LABEL = {"GeminiClient": "gemini", "GroqClient": "groq"}
+_ENGINE_LABEL = {"GroqClient": "groq"}
 
 
 def generate(

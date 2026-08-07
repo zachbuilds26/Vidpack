@@ -20,16 +20,12 @@ class Settings(BaseSettings):
     app_port: int = 8000
 
     youtube_api_key: str = ""
-    gemini_api_key: str = ""
     groq_api_key: str = ""
     youtube_quota_daily_limit: int = 10000
 
     db_path: str = str(BASE_DIR / "data" / "vidpack.db")
 
     research_max_videos: int = 30
-
-    gemini_model: str = "gemini-2.5-flash"
-    gemini_timeout_seconds: float = 45.0
 
     groq_model: str = "llama-3.3-70b-versatile"
     groq_timeout_seconds: float = 60.0
@@ -39,10 +35,6 @@ class Settings(BaseSettings):
     @property
     def has_youtube_key(self) -> bool:
         return bool(self.youtube_api_key.strip())
-
-    @property
-    def has_gemini_key(self) -> bool:
-        return bool(self.gemini_api_key.strip())
 
     @property
     def has_groq_key(self) -> bool:

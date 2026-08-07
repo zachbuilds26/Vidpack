@@ -14,7 +14,7 @@ from ..repositories import Repositories
 
 logger = logging.getLogger("vidpack.kit")
 
-_ENGINE_LABEL = {"GeminiClient": "gemini", "GroqClient": "groq"}
+_ENGINE_LABEL = {"GroqClient": "groq"}
 
 
 def _minimal_summary(niche: str) -> dict:
