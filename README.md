@@ -12,7 +12,11 @@ hooks" re-rank as stats move.
 
 Built for the [YouTube Automation Hackathon](https://youtube-automate-hackathon.devpost.com/).
 
+**Live demo: <https://vidpack.onrender.com>** — deployed on Render (landing at `/`, app at `/app`).
+
 ## Demo
+
+Try it live at **<https://vidpack.onrender.com>**, or run locally:
 
 ```
 .\run.ps1
@@ -67,6 +71,18 @@ Open http://127.0.0.1:8000 — the landing page. The app lives at `/app`.
   `GROQ_API_KEY=`. Optional extras `GROQ_API_KEY_2=` / `GROQ_API_KEY_3=` enable
   automatic key rotation. If no Groq key is set at all, vidpack runs in `rules` mode
   at full functionality — deterministic packages, no AI.
+
+## Deploy (Render)
+
+The live site runs on a free Render web service:
+
+- **Build command**: `pip install -r requirements.txt`
+- **Start command**: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+- **Environment**: `YOUTUBE_API_KEY`, `GROQ_API_KEY`, `GROQ_API_KEY_2`, `GROQ_API_KEY_3`
+  (Render's "Add from .env" accepts the same `KEY=VALUE` lines as `.env`)
+
+Note: Render's free tier uses an ephemeral disk — the SQLite library resets on each
+redeploy. The local `data/vidpack.db` remains the compounding source of truth.
 
 ## Architecture
 
